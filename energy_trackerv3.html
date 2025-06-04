@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Tracker</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Fallback styles for Tailwind */
+        .max-w-4xl { max-width: 56rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .p-6 { padding: 1.5rem; }
+        .bg-white { background-color: white; }
+        .min-h-screen { min-height: 100vh; }
+        .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+        .font-bold { font-weight: 700; }
+        .text-gray-800 { color: #1f2937; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .text-gray-600 { color: #4b5563; }
+        .flex { display: flex; }
+        .gap-2 { gap: 0.5rem; }
+        .flex-wrap { flex-wrap: wrap; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .font-medium { font-weight: 500; }
+        .bg-blue-600 { background-color: #2563eb; }
+        .text-white { color: white; }
+        .bg-gray-200 { background-color: #e5e7eb; }
+        .text-gray-700 { color: #374151; }
+        .border { border-width: 1px; }
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .gap-6 { gap: 1.5rem; }
+        .bg-gray-50 { background-color: #f9fafb; }
+        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+        .font-semibold { font-weight: 600; }
+        .mb-4 { margin-bottom: 1rem; }
+        .w-full { width: 100%; }
+        .h-2 { height: 0.5rem; }
+        .appearance-none { appearance: none; }
+        .cursor-pointer { cursor: pointer; }
+        .text-xs { font-size: 0.75rem; line-height: 1rem; }
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .text-gray-500 { color: #6b7280; }
+        .mt-1 { margin-top: 0.25rem; }
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
+        .max-h-96 { max-height: 24rem; }
+        .overflow-y-auto { overflow-y: auto; }
+        .bg-blue-50 { background-color: #eff6ff; }
+        .bg-yellow-50 { background-color: #fffbeb; }
+        .bg-green-100 { background-color: #dcfce7; }
+        .text-green-800 { color: #166534; }
+        .bg-yellow-100 { background-color: #fef3c7; }
+        .text-yellow-800 { color: #92400e; }
+        .bg-blue-100 { background-color: #dbeafe; }
+        .text-blue-800 { color: #1e40af; }
+        .bg-purple-100 { background-color: #e9d5ff; }
+        .text-purple-800 { color: #6b21a8; }
+        .hover\:bg-blue-700:hover { background-color: #1d4ed8; }
+        .transition-colors { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .top-2 { top: 0.5rem; }
+        .right-2 { right: 0.5rem; }
+        .text-gray-400 { color: #9ca3af; }
+        .hover\:text-red-600:hover { color: #dc2626; }
+        .pr-8 { padding-right: 2rem; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .items-start { align-items: flex-start; }
+        .gap-4 { gap: 1rem; }
+        .text-center { text-align: center; }
+        .text-green-600 { color: #16a34a; }
+        .text-blue-600 { color: #2563eb; }
+        .text-red-600 { color: #dc2626; }
+        .mt-4 { margin-top: 1rem; }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .block { display: block; }
+        .mb-1 { margin-bottom: 0.25rem; }
+        .p-2 { padding: 0.5rem; }
+        .form-radio { 
+            appearance: none; 
+            background-color: #fff; 
+            border: 2px solid #d1d5db; 
+            border-radius: 50%; 
+            width: 1rem; 
+            height: 1rem; 
+            cursor: pointer;
+            position: relative;
+        }
+        .form-radio:checked { 
+            background-color: #2563eb; 
+            border-color: #2563eb; 
+        }
+        .form-radio:checked::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+        .form-checkbox { 
+            appearance: none; 
+            background-color: #fff; 
+            border: 2px solid #d1d5db; 
+            border-radius: 4px; 
+            width: 1rem; 
+            height: 1rem; 
+            cursor: pointer;
+            position: relative;
+        }
+        .form-checkbox:checked { 
+            background-color: #2563eb; 
+            border-color: #2563eb; 
+        }
+        .form-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: -2px;
+            left: 1px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .h-20 { height: 5rem; }
+        .resize-none { resize: none; }
+        .p-4 { padding: 1rem; }
+        .p-3 { padding: 0.75rem; }
+        .bg-red-100 { background-color: #fee2e2; }
+        .text-red-800 { color: #991b1b; }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f3f4f6;">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Simple icon components as text
+        const Plus = () => <span>➕</span>;
+        const Calendar = () => <span>📅</span>;
+        const TrendingUp = () => <span>📊</span>;
+        const Battery = () => <span>🔋</span>;
+        const Brain = () => <span>🧠</span>;
+        const Heart = () => <span>❤️</span>;
+        const Zap = () => <span>⚡</span>;
+
+        const EnergyTracker = () => {
+            const [entries, setEntries] = useState(() => {
+                try {
+                    const saved = localStorage.getItem('energyEntries');
+                    return saved ? JSON.parse(saved) : [];
+                } catch (e) {
+                    return [];
+                }
+            });
+            
+            const [currentEntry, setCurrentEntry] = useState(() => {
+                const now = new Date();
+                const hours24 = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                
+                return {
+                    date: new Date().toISOString().split('T')[0],
+                    time: `${hours24}:${minutes}`,
+                    physical: 0,
+                    mental: 0,
+                    emotional: 0,
+                    sensoryIssues: {
+                        formication: false,
+                        noise: false,
+                        light: false
+                    },
+                    caffeineScoops: 0,
+                    extraSugar: false,
+                    activityType: '',
+                    notes: '',
+                    timeBlock: 'morning'
+                };
+            });
+            const [viewMode, setViewMode] = useState('daily');
+            const [granularMode, setGranularMode] = useState(false);
+
+            useEffect(() => {
+                try {
+                    localStorage.setItem('energyEntries', JSON.stringify(entries));
+                } catch (e) {
+                    console.log('Could not save to localStorage');
+                }
+            }, [entries]);
+
+            const timeBlocks = {
+                'morning': { label: 'Morning Power (7-12)', color: 'bg-green-100 text-green-800' },
+                'afternoon': { label: 'Afternoon Admin (1-4)', color: 'bg-yellow-100 text-yellow-800' },
+                'evening': { label: 'Evening Wind-down', color: 'bg-blue-100 text-blue-800' },
+                'late': { label: 'Late Night', color: 'bg-purple-100 text-purple-800' }
+            };
+
+            const activityTypes = [
+                'Work - A (Appointments/Meetings)',
+                'Work - B (Bottleneck/Blocked)',
+                'Work - C (Critical Projects)',
+                'Work - F (Flexible Tasks)',
+                'Work - Admin/Email',
+                'Work - Deep Focus',
+                'Work - Collaborative',
+                'Consulting Business',
+                'IntentLab/Personal Development',
+                'Recharging/Rest',
+                'Chores/Household',
+                'Errands/Shopping',
+                'Social/Family Time',
+                'Exercise/Movement',
+                'Meal/Cooking',
+                'Transit/Commute',
+                'Entertainment/Leisure',
+                'Learning/Reading'
+            ];
+
+            const addEntry = () => {
+                const newEntry = {
+                    ...currentEntry,
+                    id: Date.now(),
+                    timestamp: new Date().toISOString()
+                };
+                setEntries([newEntry, ...entries]);
+                
+                const currentTime = new Date();
+                currentTime.setHours(currentTime.getHours() + 1);
+                const hours24 = currentTime.getHours().toString().padStart(2, '0');
+                const minutes = currentTime.getMinutes().toString().padStart(2, '0');
+                
+                setCurrentEntry({
+                    ...currentEntry,
+                    time: `${hours24}:${minutes}`,
+                    notes: '',
+                    sensoryIssues: { formication: false, noise: false, light: false },
+                    caffeineScoops: 0,
+                    extraSugar: false
+                });
+            };
+
+            const deleteEntry = (id) => {
+                setEntries(entries.filter(entry => entry.id !== id));
+            };
+
+            const exportData = () => {
+                const dataToExport = {
+                    entries: entries,
+                    exportDate: new Date().toISOString(),
+                    version: "1.0"
+                };
+                
+                const dataStr = JSON.stringify(dataToExport, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(dataBlob);
+                link.download = `energy-tracker-backup-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            const importData = (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        if (importedData.entries && Array.isArray(importedData.entries)) {
+                            // Merge with existing data, avoiding duplicates
+                            const existingIds = new Set(entries.map(entry => entry.id));
+                            const newEntries = importedData.entries.filter(entry => !existingIds.has(entry.id));
+                            setEntries([...entries, ...newEntries].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
+                            alert(`Successfully imported ${newEntries.length} new entries!`);
+                        } else {
+                            alert('Invalid file format');
+                        }
+                    } catch (error) {
+                        alert('Error reading file: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+                event.target.value = ''; // Reset file input
+            };
+
+            const EnergySlider = ({ label, value, onChange, icon: Icon, color }) => (
+                <div className="mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                            <Icon />
+                            <label className="font-medium text-sm">{label}</label>
+                        </div>
+                        <span className="text-lg font-bold">
+                            {value === 0 ? 'Baseline' : value > 0 ? `+${value}` : `${value}`}
+                        </span>
+                    </div>
+                    <input
+                        type="range"
+                        min="-5"
+                        max="5"
+                        value={value}
+                        onChange={(e) => onChange(parseInt(e.target.value))}
+                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                        style={{
+                            background: value === 0 
+                                ? '#e5e7eb' 
+                                : value > 0 
+                                    ? `linear-gradient(to right, #e5e7eb 0%, #e5e7eb 50%, #10b981 50%, #10b981 ${50 + (value * 10)}%, #e5e7eb ${50 + (value * 10)}%, #e5e7eb 100%)`
+                                    : `linear-gradient(to right, #e5e7eb 0%, #e5e7eb ${50 + (value * 10)}%, #ef4444 ${50 + (value * 10)}%, #ef4444 50%, #e5e7eb 50%, #e5e7eb 100%)`
+                        }}
+                    />
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>Drained (-5)</span>
+                        <span>Baseline (0)</span>
+                        <span>Energized (+5)</span>
+                    </div>
+                </div>
+            );
+
+            const calculateAverages = (timeframe = 'week') => {
+                if (entries.length === 0) return null;
+                
+                const now = new Date();
+                const filteredEntries = entries.filter(entry => {
+                    const entryDate = new Date(entry.date);
+                    const daysDiff = (now - entryDate) / (1000 * 60 * 60 * 24);
+                    return timeframe === 'week' ? daysDiff <= 7 : daysDiff <= 30;
+                });
+
+                if (filteredEntries.length === 0) return null;
+
+                const totals = filteredEntries.reduce((acc, entry) => ({
+                    physical: acc.physical + entry.physical,
+                    mental: acc.mental + entry.mental,
+                    emotional: acc.emotional + entry.emotional,
+                    count: acc.count + 1
+                }), { physical: 0, mental: 0, emotional: 0, count: 0 });
+
+                return {
+                    physical: (totals.physical / totals.count).toFixed(1),
+                    mental: (totals.mental / totals.count).toFixed(1),
+                    emotional: (totals.emotional / totals.count).toFixed(1),
+                    count: totals.count
+                };
+            };
+
+            const getPatternInsights = () => {
+                if (entries.length < 5) return [];
+                
+                const insights = [];
+                
+                const morningEntries = entries.filter(e => e.timeBlock === 'morning');
+                const afternoonEntries = entries.filter(e => e.timeBlock === 'afternoon');
+                
+                if (morningEntries.length > 0 && afternoonEntries.length > 0) {
+                    const morningAvg = morningEntries.reduce((sum, e) => sum + e.mental, 0) / morningEntries.length;
+                    const afternoonAvg = afternoonEntries.reduce((sum, e) => sum + e.mental, 0) / afternoonEntries.length;
+                    
+                    if (morningAvg > afternoonAvg + 1) {
+                        insights.push({
+                            type: 'strength',
+                            message: `Your morning mental energy averages ${morningAvg.toFixed(1)} vs ${afternoonAvg.toFixed(1)} in afternoons. Protect that morning power block!`
+                        });
+                    }
+                }
+
+                const rechargingEntries = entries.filter(e => e.activityType && e.activityType.includes('Recharging'));
+                if (rechargingEntries.length > 2) {
+                    const rechargingAvg = rechargingEntries.reduce((sum, e) => sum + (e.physical + e.mental + e.emotional) / 3, 0) / rechargingEntries.length;
+                    insights.push({
+                        type: 'info',
+                        message: `Recharging activities show ${rechargingAvg.toFixed(1)} average energy. ${rechargingAvg > 1 ? 'Good recovery strategy!' : 'Consider different recharging methods.'}`
+                    });
+                }
+
+                // Caffeine correlation insights
+                const caffeineEntries = entries.filter(e => e.caffeineScoops > 0);
+                const formicationEntries = entries.filter(e => e.sensoryIssues?.formication);
+                
+                if (caffeineEntries.length > 3 && formicationEntries.length > 1) {
+                    const caffeineWithFormication = entries.filter(e => e.caffeineScoops > 0 && e.sensoryIssues?.formication);
+                    if (caffeineWithFormication.length > 0) {
+                        const avgCaffeineWhenFormication = caffeineWithFormication.reduce((sum, e) => sum + e.caffeineScoops, 0) / caffeineWithFormication.length;
+                        insights.push({
+                            type: 'warning',
+                            message: `Formication episodes average ${avgCaffeineWhenFormication.toFixed(1)} caffeine scoops. Consider reducing intake when it reaches this level.`
+                        });
+                    }
+                }
+
+                if (caffeineEntries.length > 3) {
+                    const avgCaffeine = caffeineEntries.reduce((sum, e) => sum + e.caffeineScoops, 0) / caffeineEntries.length;
+                    const highCaffeineEntries = caffeineEntries.filter(e => e.caffeineScoops > avgCaffeine);
+                    if (highCaffeineEntries.length > 0) {
+                        const physicalImpact = highCaffeineEntries.reduce((sum, e) => sum + e.physical, 0) / highCaffeineEntries.length;
+                        insights.push({
+                            type: 'info',
+                            message: `Higher caffeine intake (>${avgCaffeine.toFixed(1)} scoops) shows ${physicalImpact > 0 ? '+' : ''}${physicalImpact.toFixed(1)} average physical energy impact.`
+                        });
+                    }
+                }
+
+                const workEntries = entries.filter(e => e.activityType && e.activityType.includes('Work'));
+                const personalEntries = entries.filter(e => e.activityType && (e.activityType.includes('IntentLab') || e.activityType.includes('Business')));
+                
+                if (workEntries.length > 2 && personalEntries.length > 2) {
+                    const workAvg = workEntries.reduce((sum, e) => sum + e.emotional, 0) / workEntries.length;
+                    const personalAvg = personalEntries.reduce((sum, e) => sum + e.emotional, 0) / personalEntries.length;
+                    
+                    if (personalAvg > workAvg + 1) {
+                        insights.push({
+                            type: 'strength',
+                            message: `Personal/business activities energize you more (${personalAvg.toFixed(1)}) than work activities (${workAvg.toFixed(1)}). Good sign for your transition strategy!`
+                        });
+                    }
+                }
+
+                return insights;
+            };
+
+            const averages = calculateAverages();
+            const insights = getPatternInsights();
+
+            return (
+                <div className="max-w-4xl mx-auto p-6 bg-white min-h-screen">
+                    <div className="mb-6">
+                        <h1 className="text-2xl font-bold text-gray-800 mb-2">All-Day Energy Tracker</h1>
+                        <p className="text-gray-600">Track your energy patterns across all activities to optimize your sustainable rhythm</p>
+                    </div>
+
+                    <div className="flex gap-2 mb-6 flex-wrap">
+                        <button
+                            onClick={() => setGranularMode(!granularMode)}
+                            className={`px-4 py-2 rounded-lg font-medium ${granularMode ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                        >
+                            {granularMode ? 'Granular Mode' : 'Simple Mode'}
+                        </button>
+                        <div className="flex border rounded-lg">
+                            {['daily', 'weekly', 'patterns'].map(mode => (
+                                <button
+                                    key={mode}
+                                    onClick={() => setViewMode(mode)}
+                                    className={`px-4 py-2 capitalize ${viewMode === mode ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'} ${mode === 'daily' ? 'rounded-l-lg' : mode === 'patterns' ? 'rounded-r-lg' : ''}`}
+                                    style={{ border: 'none' }}
+                                >
+                                    {mode}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div className="bg-gray-50 rounded-lg p-6">
+                            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <Plus />
+                                Log Energy Level
+                            </h2>
+                            
+                            <div className="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label className="block text-sm font-medium mb-1">Date</label>
+                                    <input
+                                        type="date"
+                                        value={currentEntry.date}
+                                        onChange={(e) => setCurrentEntry({...currentEntry, date: e.target.value})}
+                                        className="w-full p-2 border rounded-lg"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-1">Time</label>
+                                    <input
+                                        type="time"
+                                        value={currentEntry.time}
+                                        onChange={(e) => setCurrentEntry({...currentEntry, time: e.target.value})}
+                                        className="w-full p-2 border rounded-lg"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium mb-2">Time Block</label>
+                                <div className="grid grid-cols-2 gap-2">
+                                    {Object.entries(timeBlocks).map(([key, block]) => (
+                                        <label key={key} className="flex items-center gap-2 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="timeBlock"
+                                                value={key}
+                                                checked={currentEntry.timeBlock === key}
+                                                onChange={(e) => setCurrentEntry({...currentEntry, timeBlock: e.target.value})}
+                                                className="form-radio"
+                                            />
+                                            <span className={`px-2 py-1 rounded text-xs ${block.color}`}>
+                                                {block.label}
+                                            </span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <EnergySlider
+                                label="Physical Energy"
+                                value={currentEntry.physical}
+                                onChange={(value) => setCurrentEntry({...currentEntry, physical: value})}
+                                icon={Battery}
+                                color="text-green-600"
+                            />
+
+                            <EnergySlider
+                                label="Mental Focus"
+                                value={currentEntry.mental}
+                                onChange={(value) => setCurrentEntry({...currentEntry, mental: value})}
+                                icon={Brain}
+                                color="text-blue-600"
+                            />
+
+                            <EnergySlider
+                                label="Emotional Energy"
+                                value={currentEntry.emotional}
+                                onChange={(value) => setCurrentEntry({...currentEntry, emotional: value})}
+                                icon={Heart}
+                                color="text-red-600"
+                            />
+
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium mb-2">Sensory Issues</label>
+                                <div className="space-y-2">
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            checked={currentEntry.sensoryIssues.formication}
+                                            onChange={(e) => setCurrentEntry({
+                                                ...currentEntry, 
+                                                sensoryIssues: {...currentEntry.sensoryIssues, formication: e.target.checked}
+                                            })}
+                                            className="form-checkbox"
+                                        />
+                                        <span className="text-sm">🐛 Formication (crawling sensation)</span>
+                                    </label>
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            checked={currentEntry.sensoryIssues.noise}
+                                            onChange={(e) => setCurrentEntry({
+                                                ...currentEntry, 
+                                                sensoryIssues: {...currentEntry.sensoryIssues, noise: e.target.checked}
+                                            })}
+                                            className="form-checkbox"
+                                        />
+                                        <span className="text-sm">🔊 Noise sensitivity</span>
+                                    </label>
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            checked={currentEntry.sensoryIssues.light}
+                                            onChange={(e) => setCurrentEntry({
+                                                ...currentEntry, 
+                                                sensoryIssues: {...currentEntry.sensoryIssues, light: e.target.checked}
+                                            })}
+                                            className="form-checkbox"
+                                        />
+                                        <span className="text-sm">💡 Light sensitivity</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label className="block text-sm font-medium mb-2">☕ Caffeine Intake</label>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => setCurrentEntry({...currentEntry, caffeineScoops: Math.max(0, currentEntry.caffeineScoops - 1)})}
+                                            className="bg-gray-200 text-gray-700 px-3 py-1 rounded font-bold hover:bg-gray-300"
+                                        >
+                                            −
+                                        </button>
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="20"
+                                            value={currentEntry.caffeineScoops}
+                                            onChange={(e) => setCurrentEntry({...currentEntry, caffeineScoops: parseInt(e.target.value) || 0})}
+                                            className="w-16 p-2 border rounded-lg text-center"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setCurrentEntry({...currentEntry, caffeineScoops: currentEntry.caffeineScoops + 1})}
+                                            className="bg-gray-200 text-gray-700 px-3 py-1 rounded font-bold hover:bg-gray-300"
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-1">Small scoops (1 = small, 4 = large scoop)</p>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2">🍯 Sugar Intake</label>
+                                    <label className="flex items-center gap-2 cursor-pointer mt-3">
+                                        <input
+                                            type="checkbox"
+                                            checked={currentEntry.extraSugar}
+                                            onChange={(e) => setCurrentEntry({...currentEntry, extraSugar: e.target.checked})}
+                                            className="form-checkbox"
+                                        />
+                                        <span className="text-sm">More sugar than usual today</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {granularMode && (
+                                <>
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium mb-2">Activity Type</label>
+                                        <select
+                                            value={currentEntry.activityType}
+                                            onChange={(e) => setCurrentEntry({...currentEntry, activityType: e.target.value})}
+                                            className="w-full p-2 border rounded-lg"
+                                        >
+                                            <option value="">Select activity type</option>
+                                            {activityTypes.map(type => (
+                                                <option key={type} value={type}>{type}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium mb-2">Notes</label>
+                                        <textarea
+                                            value={currentEntry.notes}
+                                            onChange={(e) => setCurrentEntry({...currentEntry, notes: e.target.value})}
+                                            placeholder="What affected your energy? Any patterns noticed?"
+                                            className="w-full p-2 border rounded-lg h-20 resize-none"
+                                        />
+                                    </div>
+                                </>
+                            )}
+
+                            <button
+                                onClick={addEntry}
+                                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors mb-3"
+                            >
+                                Log Entry
+                            </button>
+                            
+                            <div className="grid grid-cols-2 gap-2">
+                                <button
+                                    onClick={exportData}
+                                    className="bg-green-600 text-white py-2 px-3 rounded-lg font-medium hover:bg-green-700 transition-colors text-sm"
+                                >
+                                    📥 Export Data
+                                </button>
+                                <button
+                                    onClick={() => document.getElementById('importFile').click()}
+                                    className="bg-purple-600 text-white py-2 px-3 rounded-lg font-medium hover:bg-purple-700 transition-colors text-sm"
+                                >
+                                    📤 Import Data
+                                </button>
+                            </div>
+                            <input
+                                type="file"
+                                id="importFile"
+                                accept=".json"
+                                onChange={importData}
+                                style={{ display: 'none' }}
+                            />
+                        </div>
+
+                        <div className="space-y-6">
+                            {averages && (
+                                <div className="bg-blue-50 rounded-lg p-6">
+                                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                                        <TrendingUp />
+                                        Recent Averages ({averages.count} entries)
+                                    </h3>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div className="text-center">
+                                            <div className="text-2xl font-bold text-green-600">{averages.physical}</div>
+                                            <div className="text-sm text-gray-600">Physical</div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-2xl font-bold text-blue-600">{averages.mental}</div>
+                                            <div className="text-sm text-gray-600">Mental</div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-2xl font-bold text-red-600">{averages.emotional}</div>
+                                            <div className="text-sm text-gray-600">Emotional</div>
+                                        </div>
+                                    </div>
+                                    <div className="mt-4 text-sm text-gray-600">
+                                        Target: 4+ for sustainable rhythm
+                                    </div>
+                                </div>
+                            )}
+
+                            {viewMode === 'patterns' && insights.length > 0 && (
+                                <div className="bg-yellow-50 rounded-lg p-6">
+                                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                                        <Zap />
+                                        Pattern Insights
+                                    </h3>
+                                    <div className="space-y-3">
+                                        {insights.map((insight, index) => (
+                                            <div
+                                                key={index}
+                                                className={`p-3 rounded-lg ${
+                                                    insight.type === 'strength' ? 'bg-green-100 text-green-800' :
+                                                    insight.type === 'warning' ? 'bg-red-100 text-red-800' :
+                                                    'bg-blue-100 text-blue-800'
+                                                }`}
+                                            >
+                                                {insight.message}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="bg-gray-50 rounded-lg p-6">
+                                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                                    <Calendar />
+                                    Recent Entries
+                                </h3>
+                                <div className="space-y-3 max-h-96 overflow-y-auto">
+                                    {entries.slice(0, 15).map((entry) => (
+                                        <div key={entry.id} className="bg-white rounded-lg p-4 border relative">
+                                            <button
+                                                onClick={() => deleteEntry(entry.id)}
+                                                className="absolute top-2 right-2 text-gray-400 hover:text-red-600 text-xs"
+                                                style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                                            >
+                                                ✕
+                                            </button>
+                                            <div className="flex justify-between items-start mb-2 pr-8">
+                                                <div className="text-sm text-gray-600">
+                                                    {entry.date} at {entry.time}
+                                                </div>
+                                                <span className={`px-2 py-1 rounded text-xs ${timeBlocks[entry.timeBlock]?.color || 'bg-gray-100'}`}>
+                                                    {timeBlocks[entry.timeBlock]?.label || entry.timeBlock}
+                                                </span>
+                                            </div>
+                                            <div className="flex gap-4 mb-2">
+                                                <div className="flex items-center gap-2">
+                                                    <Battery />
+                                                    <span className="text-sm">
+                                                        {entry.physical === 0 ? '0' : entry.physical > 0 ? `+${entry.physical}` : `${entry.physical}`}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <Brain />
+                                                    <span className="text-sm">
+                                                        {entry.mental === 0 ? '0' : entry.mental > 0 ? `+${entry.mental}` : `${entry.mental}`}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <Heart />
+                                                    <span className="text-sm">
+                                                        {entry.emotional === 0 ? '0' : entry.emotional > 0 ? `+${entry.emotional}` : `${entry.emotional}`}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            {(entry.sensoryIssues?.formication || entry.sensoryIssues?.noise || entry.sensoryIssues?.light) && (
+                                                <div className="text-sm text-orange-600 mb-1 flex gap-2">
+                                                    <span>Sensory:</span>
+                                                    {entry.sensoryIssues?.formication && <span>🐛</span>}
+                                                    {entry.sensoryIssues?.noise && <span>🔊</span>}
+                                                    {entry.sensoryIssues?.light && <span>💡</span>}
+                                                </div>
+                                            )}
+                                            {(entry.caffeineScoops > 0 || entry.extraSugar) && (
+                                                <div className="text-sm text-blue-600 mb-1 flex gap-3">
+                                                    {entry.caffeineScoops > 0 && <span>☕ {entry.caffeineScoops} scoops</span>}
+                                                    {entry.extraSugar && <span>🍯 Extra sugar</span>}
+                                                </div>
+                                            )}
+                                            {entry.activityType && (
+                                                <div className="text-sm text-gray-600 mb-1">
+                                                    Activity: {entry.activityType}
+                                                </div>
+                                            )}
+                                            {entry.notes && (
+                                                <div className="text-sm text-gray-700 bg-gray-100 rounded p-2">
+                                                    {entry.notes}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<EnergyTracker />);
+    </script>
+</body>
+</html>
